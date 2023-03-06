@@ -1,5 +1,4 @@
-﻿using Exiled.API.Enums;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using System;
 using System.Collections.Generic;
@@ -13,11 +12,11 @@ namespace PowerRounds
         public override string Name => "Power Rounds";
         public override string Author => "ProcrastiNate";
         public override Version Version => new Version(0, 0, 1);
+        public override Version RequiredExiledVersion => new Version(6, 0, 0);
+
         public static PowerRounds Instance { get; } = new PowerRounds();
 
-        public override PluginPriority Priority { get; } = PluginPriority.Default;
-
-        private List<RuleSet> _ruleSets = new List<RuleSet>();
+        private List<PowerRoundList> _powerRounds = new List<PowerRoundList>();
         private Random _random = new Random();
 
         private Handlers.Player player;
@@ -33,6 +32,12 @@ namespace PowerRounds
         public override void OnEnabled()
         {
             RegisterEvents();
+
+            foreach (var powerRound in _powerRounds)
+            {
+                
+            }
+
             base.OnEnabled();
         }
 
@@ -56,18 +61,18 @@ namespace PowerRounds
 
         private void OnRoundStarted()
         {
-            _roundCount++;
+            if(_roundCount % PowerRounds.Instance.Config.RoundsUnilPR == 0)
+            {
+                
+            }
         }
 
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
-            if (_roundCount % PowerRounds.Instance.Config.RoundsUnilPR == 0)
-            {
-
-            }
+            _roundCount++;
         }
 
-        public class RuleSet
+        public class PowerRoundList
         {
 
         }
