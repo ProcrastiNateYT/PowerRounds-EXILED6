@@ -1,8 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using System;
-using System.Collections.Generic;
-
 
 namespace PowerRounds
 {
@@ -16,14 +14,15 @@ namespace PowerRounds
 
         public static PowerRounds Instance { get; } = new PowerRounds();
 
-        private List<PowerRoundList> _powerRounds = new List<PowerRoundList>();
+        private string[] prRounds;
+
         private Random _random = new Random();
 
         private Handlers.Player player;
         private Handlers.Server server;
 
         private int _roundCount = 0;
-
+        
         private PowerRounds()
         {
 
@@ -32,12 +31,6 @@ namespace PowerRounds
         public override void OnEnabled()
         {
             RegisterEvents();
-
-            foreach (var powerRound in _powerRounds)
-            {
-                
-            }
-
             base.OnEnabled();
         }
 
@@ -61,9 +54,12 @@ namespace PowerRounds
 
         private void OnRoundStarted()
         {
+            
+            
             if(_roundCount % PowerRounds.Instance.Config.RoundsUnilPR == 0)
             {
-                
+                int rand = _random.Next(0, prRounds.Length - 1);
+                Log.Info($"Round chosen: {prRounds[rand]}");
             }
         }
 
