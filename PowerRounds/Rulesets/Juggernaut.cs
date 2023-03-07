@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace PowerRounds.RuleSets
+
+namespace PowerRounds.Rulesets
 {
     internal class Juggernaut
     {
+        private Juggernaut() 
+        {
+
+        }
+
+
     }
 }

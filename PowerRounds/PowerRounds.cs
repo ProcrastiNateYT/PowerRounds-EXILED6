@@ -1,8 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Server;
 using System;
-using System.Collections.Generic;
-
+using System.Reflection;
 
 namespace PowerRounds
 {
@@ -16,7 +15,9 @@ namespace PowerRounds
 
         public static PowerRounds Instance { get; } = new PowerRounds();
 
-        private List<PowerRoundList> _powerRounds = new List<PowerRoundList>();
+        private string[] prRounds;
+        private int prSelect;
+
         private Random _random = new Random();
 
         private Handlers.Player player;
@@ -24,6 +25,13 @@ namespace PowerRounds
 
         private int _roundCount = 0;
 
+
+        /// <summary>
+        /// Commented code below to be used in future implementation.
+        /// </summary>
+        //private string configPath = @"%appdata%\EXILED\Configs\PowerRounds";
+
+        
         private PowerRounds()
         {
 
@@ -32,11 +40,26 @@ namespace PowerRounds
         public override void OnEnabled()
         {
             RegisterEvents();
+            
+            
+            /*
+            string path = Environment.ExpandEnvironmentVariables(configPath);
 
-            foreach (var powerRound in _powerRounds)
+            try
             {
-                
+                if (Directory.Exists(path))
+                {
+                    Log.Info("Directory already exists.");
+                }
+                DirectoryInfo di = Directory.CreateDirectory(path);
+                Log.Info("PowerRounds directory created.");
+
             }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+            }
+            */
 
             base.OnEnabled();
         }
@@ -61,9 +84,12 @@ namespace PowerRounds
 
         private void OnRoundStarted()
         {
+            
+            
             if(_roundCount % PowerRounds.Instance.Config.RoundsUnilPR == 0)
             {
-                
+                int rand = _random.Next(0, prRounds.Length - 1);
+                Log.Info($"Round chosen: {prRounds[rand]}");
             }
         }
 
