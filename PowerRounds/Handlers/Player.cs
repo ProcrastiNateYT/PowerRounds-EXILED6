@@ -9,8 +9,11 @@ using System.Threading.Tasks;
 
 namespace PowerRounds.Handlers
 {
-     class Player
+     internal sealed class Player
     {
-        
+        public void OnChangingRole(ChangingRoleEventArgs ev)
+        {
+
+        }
     }
 }

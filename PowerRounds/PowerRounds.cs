@@ -15,7 +15,11 @@ namespace PowerRounds
 
         public static PowerRounds Instance { get; } = new PowerRounds();
 
-        private string[] prRounds = { "Juggernaut", "Zombie Survival", "Lights Out" };
+        private Handlers.Server serverHandler;
+        private Handlers.Player playerHandler;
+
+        public string[] prRounds = { "Lights Out" };
+        public string _prName;
 
         private Random _random = new Random();
 
@@ -23,7 +27,7 @@ namespace PowerRounds
         private Handlers.Server server;
 
         private int _roundCount = 0;
-        
+
         private PowerRounds()
         {
 
@@ -32,7 +36,7 @@ namespace PowerRounds
         public override void OnEnabled()
         {
             Log.Debug("OnEnabled called.");
-            
+
             RegisterEvents();
             base.OnEnabled();
         }
@@ -40,7 +44,7 @@ namespace PowerRounds
         public override void OnDisabled()
         {
             Log.Debug("OnDisabled called.");
-            
+
             UnregisterEvents();
             base.OnDisabled();
         }
@@ -52,18 +56,26 @@ namespace PowerRounds
             base.OnReloaded();
         }
 
-        public void RegisterEvents()
+        private void RegisterEvents()
         {
             Log.Debug("RegisterEvents called.");
+
+            serverHandler = new Handlers.Server();
+            playerHandler = new Handlers.Player();
+            
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
             Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         }
 
-        public void UnregisterEvents()
+        private void UnregisterEvents()
         {
             Log.Debug("UnregisterEvents called");
+            
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
             Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+            
+            serverHandler = null;
+            playerHandler = null;
         }
 
         private void OnRoundStarted()
@@ -72,22 +84,24 @@ namespace PowerRounds
 
             Log.Debug($"OnRoundStarted called. Current round:{_roundCount.ToString()}");
 
-            if(_roundCount % PowerRounds.Instance.Config.RoundsUnilPR == 0)
+            if (_roundCount % PowerRounds.Instance.Config.RoundsUnilPR == 0)
             {
                 Log.Debug("Round criteria met, choosing power round.");
 
                 int rand = _random.Next(0, prRounds.Length - 1);
 
+                _prName = prRounds[rand];
+
                 Log.Debug($"There are {prRounds.Length} round types. Selected number {rand}.");
 
-                Log.Info($"Round chosen: {prRounds[rand]}");
-                
+                Log.Info($"Power round chosen: {_prName}");
+
                 switch (prRounds[rand])
                 {
                     case "Juggernaut":
                         Rulesets.Juggernaut.prJuggernaut();
                         break;
-                    
+
                     case "Zombie Survival":
                         Rulesets.ZombieSurvival.prZombieSurvival();
                         break;
@@ -109,12 +123,7 @@ namespace PowerRounds
         private void OnRoundEnded(RoundEndedEventArgs ev)
         {
             Log.Debug("OnRoundEnded called");
-            
-            
-        }
 
-        public class PowerRoundList
-        {
 
         }
     }
